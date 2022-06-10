@@ -7,7 +7,7 @@
         state: latest
     - name: copy nginx config file
       copy:
-        src: files/nginx.conf
+        src: /etc/ansible/files/nginx.conf
         dest: /etc/nginx/sites-available/default
     - name: enable configuration
       file:
@@ -16,7 +16,7 @@
         state: link
     - name: copy index.html
       template:
-        src: templates/index.php.j2
+        src: /etc/ansible/templates/index.php.j2
         dest: /usr/share/nginx/html/index.php
         mode: 0644
       notify: Restart Nginx
