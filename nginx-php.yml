@@ -1,0 +1,8 @@
+# nginx+php role
+---
+- name: Install Nginx
+  hosts: test
+  become: yes
+  gather_facts: no
+  roles:
+    - nginx-php

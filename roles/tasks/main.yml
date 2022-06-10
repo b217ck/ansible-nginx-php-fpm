@@ -1,0 +1,40 @@
+---
+# tasks file for nginx-php
+    - name: Install Nginx
+      apt:
+        name: nginx
+        update_cache: yes
+        state: latest
+    - name: copy nginx config file
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/sites-available/default
+    - name: enable configuration
+      file:
+        dest: /etc/nginx/sites-enabled/default
+        src: /etc/nginx/sites-available/default
+        state: link
+    - name: copy index.html
+      template:
+        src: templates/index.php.j2
+        dest: /usr/share/nginx/html/index.php
+        mode: 0644
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+    - name: Install PHP-FPM
+      apt:
+        name: php-fpm
+        update_cache: yes
+        state: latest
+      with_items:
+        - php
+        - php-mysql
+        - php-PHPMailer
+        - php-curl
+        - php-common
+    - name: Start PHP-FPM
+      service:
+        name: php8.1-fpm
+        state: restarted
