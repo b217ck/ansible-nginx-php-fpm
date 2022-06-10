@@ -19,10 +19,7 @@
         src: templates/index.php.j2
         dest: /usr/share/nginx/html/index.php
         mode: 0644
-    - name: restart nginx
-      service:
-        name: nginx
-        state: restarted
+      notify: Restart Nginx
     - name: Install PHP-FPM
       apt:
         name: php-fpm
@@ -38,3 +35,18 @@
       service:
         name: php8.1-fpm
         state: restarted
+    - name: Make sure new doc root exists
+      file:
+        path: "{{ doc_root }}"
+        state: directory
+        mode: '0755'
+    - name: copy index.html to new docroot
+      template:
+        src: templates/index.php.j2
+        dest: "{{ doc_root }}/index.php"
+        mode: 0644
+    - name: Replace document root with replacing nginx config file
+      copy:
+        src: files/nginx2.conf
+        dest: /etc/nginx/sites-available/default
+      notify: Restart Nginx

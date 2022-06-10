@@ -1,2 +1,3 @@
 ---
 # defaults file for nginx-php
+doc_root: /opt/nginx/ansible
